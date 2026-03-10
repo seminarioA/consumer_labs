@@ -27,11 +27,11 @@ services:
     ports:
       - "11434:11434"               # acceso directo desde el host si lo necesitas
     healthcheck:
-      test: ["CMD", "curl", "-sf", "http://localhost:11434/api/tags"]
-      interval: 15s
-      timeout: 5s
-      retries: 10
-      start_period: 90s             # margen para primera descarga del modelo
+      test: ["CMD-SHELL", "curl -sf http://localhost:11434/api/tags | grep -q phi3"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 600s            # descarga de phi3:mini ~2.3 GB en conexión lenta
 
   # ── App React (nginx) ───────────────────────────────────────────────────────
   app:
