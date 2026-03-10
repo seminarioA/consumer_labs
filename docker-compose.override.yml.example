@@ -1,0 +1,22 @@
+# docker-compose.override.yml.example
+# ─────────────────────────────────────────────────────────────────────────────
+# Para desarrollo local:
+#   cp docker-compose.override.yml.example docker-compose.override.yml
+#   docker compose up --build
+#
+# Este archivo NO se rastrea en git (ver .gitignore) para que el VPS
+# no lo auto-fusione y nunca compile imágenes localmente.
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  ollama:
+    build:
+      context: .
+      dockerfile: Dockerfile.ollama
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_ELEVENLABS_API_KEY: ${VITE_ELEVENLABS_API_KEY:-}

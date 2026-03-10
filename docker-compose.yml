@@ -1,12 +1,20 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # PRODUCCIÓN — usa imágenes publicadas en Docker Hub.
-# Para desarrollo local ejecuta: docker compose -f docker-compose.yml -f docker-compose.override.yml up
-# O simplemente: docker compose up   (Docker fusiona el override automáticamente)
+# El CI construye las imágenes y hace push; el VPS SOLO las descarga y ejecuta.
+#
+# Despliegue en el VPS (lo hace el job "deploy" del pipeline automáticamente):
+#   export DOCKERHUB_USERNAME=tuusuario
+#   export IMAGE_TAG=sha-<commit>        # el CI lo calcula y lo pasa aquí
+#   docker compose pull
+#   docker compose up -d --remove-orphans
+#
+# Desarrollo local (necesitas crear docker-compose.override.yml desde el .example):
+#   cp docker-compose.override.yml.example docker-compose.override.yml
+#   docker compose up --build
 #
 # Variables requeridas (en .env.local o como vars de entorno del servidor):
 #   DOCKERHUB_USERNAME   → tu usuario de Docker Hub
 #   IMAGE_TAG            → tag a desplegar (default: latest)
-#   VITE_ELEVENLABS_API_KEY → opcional, para TTS natural
 # ─────────────────────────────────────────────────────────────────────────────
 
 services:

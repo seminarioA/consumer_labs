@@ -1,0 +1,32 @@
+# Normalización de líneas para garantizar LF en Linux/Docker
+# sin importar el SO del desarrollador (Windows usa CRLF por defecto)
+
+# Texto genérico → LF
+* text=auto eol=lf
+
+# Scripts de shell — SIEMPRE LF (CRLF rompe el shebang en Linux)
+*.sh    text eol=lf
+
+# Dockerfiles y configs
+Dockerfile*   text eol=lf
+nginx.conf    text eol=lf
+
+# YAML (workflows, compose)
+*.yml   text eol=lf
+*.yaml  text eol=lf
+
+# Código fuente
+*.js    text eol=lf
+*.jsx   text eol=lf
+*.ts    text eol=lf
+*.tsx   text eol=lf
+*.css   text eol=lf
+*.html  text eol=lf
+*.json  text eol=lf
+
+# Binarios — sin tocar
+*.png   binary
+*.jpg   binary
+*.ico   binary
+*.woff2 binary
+*.woff  binary
