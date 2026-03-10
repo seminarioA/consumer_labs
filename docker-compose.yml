@@ -1,10 +1,19 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# PRODUCCIÓN — usa imágenes publicadas en Docker Hub.
+# Para desarrollo local ejecuta: docker compose -f docker-compose.yml -f docker-compose.override.yml up
+# O simplemente: docker compose up   (Docker fusiona el override automáticamente)
+#
+# Variables requeridas (en .env.local o como vars de entorno del servidor):
+#   DOCKERHUB_USERNAME   → tu usuario de Docker Hub
+#   IMAGE_TAG            → tag a desplegar (default: latest)
+#   VITE_ELEVENLABS_API_KEY → opcional, para TTS natural
+# ─────────────────────────────────────────────────────────────────────────────
+
 services:
 
   # ── Ollama + phi3:mini ──────────────────────────────────────────────────────
   ollama:
-    build:
-      context: .
-      dockerfile: Dockerfile.ollama
+    image: ${DOCKERHUB_USERNAME}/consumer-labs-ollama:${IMAGE_TAG:-latest}
     container_name: consumer-labs-ollama
     restart: unless-stopped
     volumes:
@@ -16,18 +25,17 @@ services:
       interval: 15s
       timeout: 5s
       retries: 10
-      start_period: 60s             # tiempo para que descargue el modelo
+      start_period: 90s             # margen para primera descarga del modelo
 
   # ── App React (nginx) ───────────────────────────────────────────────────────
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        # Pon tu clave de ElevenLabs en .env.local o como variable de entorno
-        VITE_ELEVENLABS_API_KEY: ${VITE_ELEVENLABS_API_KEY:-}
+    image: ${DOCKERHUB_USERNAME}/consumer-labs-app:${IMAGE_TAG:-latest}
     container_name: consumer-labs-app
     restart: unless-stopped
+    environment:
+      # Solo disponible en runtime si la app lo lee desde window.__ENV__
+      # Para baked-in en build usa el secreto del pipeline CI
+      VITE_ELEVENLABS_API_KEY: ${VITE_ELEVENLABS_API_KEY:-}
     ports:
       - "80:80"
     depends_on:
