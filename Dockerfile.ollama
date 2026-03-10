@@ -1,0 +1,13 @@
+# Ollama with phi3:mini pre-descargado
+FROM ollama/ollama:latest
+
+# Script de arranque: lanza el servidor, descarga el modelo y se queda corriendo
+COPY ollama-entrypoint.sh /ollama-entrypoint.sh
+RUN chmod +x /ollama-entrypoint.sh
+
+# El volumen lo montamos desde compose; aquí solo declaramos el punto
+VOLUME ["/root/.ollama"]
+
+EXPOSE 11434
+
+ENTRYPOINT ["/ollama-entrypoint.sh"]
