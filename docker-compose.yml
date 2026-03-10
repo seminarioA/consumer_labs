@@ -32,10 +32,10 @@ services:
     image: ${DOCKERHUB_USERNAME}/consumer-labs-app:${IMAGE_TAG:-latest}
     container_name: consumer-labs-app
     restart: unless-stopped
-    environment:
-      # Solo disponible en runtime si la app lo lee desde window.__ENV__
-      # Para baked-in en build usa el secreto del pipeline CI
-      VITE_ELEVENLABS_API_KEY: ${VITE_ELEVENLABS_API_KEY:-}
+    # NOTA: VITE_ELEVENLABS_API_KEY NO va aquí.
+    # Vite hornea las env vars en el bundle estático durante el build en CI.
+    # El valor ya está dentro de la imagen publicada en Docker Hub.
+    # Para cambiarlo hay que hacer un nuevo push al repo con el secreto actualizado.
     ports:
       - "80:80"
     depends_on:
