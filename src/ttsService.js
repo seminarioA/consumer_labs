@@ -8,12 +8,9 @@ const ELEVENLABS_BASE = "https://api.elevenlabs.io/v1";
 // Voice IDs per consumer (ElevenLabs pre-made voices)
 // https://api.elevenlabs.io/v1/voices
 const VOICE_MAP = {
-  // Spanish-speaking female voice — "Valentina"
-  val: { voiceId: "XB0fDUnXU5powFXDhCwa", name: "Charlotte", lang: "es-MX" },
-  // Spanish-speaking male voice — "Carlos"
-  car: { voiceId: "nPczCjzI2devNBz1zQrb", name: "Brian",    lang: "es-MX" },
-  // Spanish-speaking female voice — "Sofía"
-  sof: { voiceId: "cgSgspJ2msm6clMCkdW9", name: "Jessica",  lang: "es-MX" },
+  val: { voiceId: "XB0fDUnXU5powFXDhCwa" },
+  car: { voiceId: "nPczCjzI2devNBz1zQrb" },
+  sof: { voiceId: "cgSgspJ2msm6clMCkdW9" },
 };
 
 // Audio pool to allow aborting
@@ -35,16 +32,14 @@ export function stopSpeaking() {
  * onStart: called right before audio begins
  * onEnd:   called when audio ends or errors
  */
-export async function speak(text, consumerId, { onStart, onEnd } = {}) {
+export async function speak(text, consumerId, apiKey, { onStart, onEnd } = {}) {
   stopSpeaking();
 
-  // Allow runtime override from settings panel (window.__elevenKey) or env
-  const apiKey = (typeof window !== "undefined" && window.__elevenKey)
-    || import.meta.env.VITE_ELEVENLABS_API_KEY;
+  const key = apiKey || import.meta.env.VITE_ELEVENLABS_API_KEY;
 
-  if (apiKey && apiKey.length > 10) {
+  if (key && key.length > 10) {
     try {
-      await speakElevenLabs(text, consumerId, apiKey, { onStart, onEnd });
+      await speakElevenLabs(text, consumerId, key, { onStart, onEnd });
       return;
     } catch (err) {
       console.warn("[TTS] ElevenLabs failed, falling back to Web Speech:", err.message);

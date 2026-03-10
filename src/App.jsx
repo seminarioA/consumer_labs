@@ -128,12 +128,7 @@ export default function App() {
 
       // speak
       if (settings.ttsEnabled) {
-        // inject ElevenLabs key from settings into env-like override
-        const tmpKey = settings.elevenKey;
-        // hack: override env variable in-memory for ttsService
-        window.__elevenKey = tmpKey;
-
-        await speak(clean, activeId, {
+        await speak(clean, activeId, settings.elevenKey, {
           onStart: () => setAvState(activeId, "talking"),
           onEnd:   () => setAvState(activeId, "idle"),
         });

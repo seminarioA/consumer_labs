@@ -205,6 +205,5 @@ Motivaciones: ${motivStr}.
 Fricciones: ${painStr}.
 Responde siempre en primera persona como consumidor real, en español. Máximo 2-3 párrafos cortos.`,
     isCustom: true,
-    sourceDocSummary: parsed.personality || "",
   };
 }
